@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, roc_auc_score, f1_score, recall_score, precision_score
+from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
+
 import time
 
 
@@ -17,9 +18,13 @@ def classification(file, dataset, classifiers_names, classifier_functions, rando
     X_train, X_test, y_train, y_test = train_test_split(dataset.iloc[:,0:-1], dataset.iloc[:,-1],
                                                         train_size=0.8, test_size=0.2, random_state=0)
     classifiers_logs = pd.DataFrame(columns=columns)
+
+    if dataset.shape[0] * dataset.shape[1] >= 5000:
+        classifiers_names = classifiers_names[0:-2]
+        classifier_functions = classifier_functions[0:-1]
+        randomized_search_functions = randomized_search_functions[0:-1]
+
     i = 0
-
-
 
     for name in classifiers_names:
         print(name)
@@ -45,7 +50,6 @@ def classification(file, dataset, classifiers_names, classifier_functions, rando
 
         # Filter only columns that show parameter values
         cv_results = cv_column_filter(cv_results)
-
 
         #############################################################
         ### Run the classifier for every combination of parameters
@@ -74,6 +78,7 @@ def classification(file, dataset, classifiers_names, classifier_functions, rando
                 end = time.perf_counter()
             except (ValueError, RuntimeError, TypeError, NameError):
                 continue
+
             train_time = end - start
             logs.at[j, "Train time"] = train_time
 

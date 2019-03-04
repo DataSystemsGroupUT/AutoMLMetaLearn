@@ -1,6 +1,7 @@
 import pandas as pd
 import glob
 import warnings
+from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -9,24 +10,26 @@ from sklearn.naive_bayes import GaussianNB,ComplementNB
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis,QuadraticDiscriminantAnalysis
 from sklearn.linear_model import Perceptron, LogisticRegression
 from Classification import  classification
-from RandomizedSearchCv import generate_hyper_AB,generate_hyper_CNB,generate_hyper_DT,generate_hyper_GBC
+from RandomizedSearchCv import generate_hyper_AB,generate_hyper_CNB,generate_hyper_DT,generate_hyper_GBC, generate_hyper_SVC
 from RandomizedSearchCv import generate_hyper_GNB,generate_hyper_GP,generate_hyper_KNN,generate_hyper_LDA
 from RandomizedSearchCv import generate_hyper_RF,generate_hyper_QDA,generate_hyper_LR,generate_hyper_Perceptron
 
 
 # List of 12 classifier names
+
+
 classifiers_names = ["KNeighborsClassifier", "GaussianProcessClassifier", "DecisionTreeClassifier", "RandomForestClassifier",
                      "AdaBoostClassifier", "GaussianNB", "QuadraticDiscriminantAnalysis", "GradientBoostingClassifier",
-                     "LinearDiscriminantAnalysis", "Perceptron", "LogisticRegression", "ComplementNB"]
+                     "LinearDiscriminantAnalysis", "Perceptron", "LogisticRegression", "ComplementNB", "SVC"]
 
 columns = ["Dataset", "Classifier", "n_neighbors", "weights", "algorithm", "leaf_size", "p", "metric",
-           "C", "kernel", "degree", "gamma", "coef0", "shrinking", "class_weight", "decision_function_shape",
+           "C", "kernel", "degree", "gamma", "coef0", "shrinking", "shrinkage", "class_weight", "decision_function_shape",
            "random_state", "criterion", "splitter", "max_depth", "min_samples_split", "min_samples_leaf",
            "max_features", "max_leaf_nodes", "min_impurity_decrease", "presort", "n_estimators", "bootstrap",
            "oob_score", "warm_start", "learning_rate", "n_restarts_optimizer", "max_iter_predict",
            "copy_X_train", "multi_class", "reg_param", "tol", "loss", "subsample", "min_weight_fraction_leaf",
            "penalty", "dual", "fit_intercept", "intercept_scaling", "solver", "max_iter", "alpha", "shuffle",
-           "early_stopping", "n_iter_no_change", "fit_prior", "norm", "eta0", "var_smoothing"
+           "early_stopping", "n_iter_no_change", "fit_prior", "norm", "eta0", "var_smoothing",
            "Train accuracy", "Train recall", "Train precision", "Train f1_score", "Train time", "Test accuracy",
            "Test recall", "Test precision", "Test f1_score", "Test time"]
 
@@ -35,7 +38,12 @@ columns = ["Dataset", "Classifier", "n_neighbors", "weights", "algorithm", "leaf
 classifier_functions = [KNeighborsClassifier(), GaussianProcessClassifier(), DecisionTreeClassifier(),
                         RandomForestClassifier(), AdaBoostClassifier(), GaussianNB(), QuadraticDiscriminantAnalysis(),
                         GradientBoostingClassifier(), LinearDiscriminantAnalysis(), Perceptron(), LogisticRegression(),
-                        ComplementNB()]
+                        ComplementNB(), SVC()]
+
+
+
+
+
 
 classifiers_logs = pd.DataFrame(columns=columns)
 
@@ -49,6 +57,8 @@ for file in allFiles:
     # Read the dataset into a pandas dataframe
     dataset = pd.read_csv(file, index_col=None, header=0)
 
+
+
     # List of functions that run RandomizedSearchCV
     # The order should match with classifiers_names and classifiers_functions
     randomized_search_functions = [generate_hyper_KNN(), generate_hyper_GP(),
@@ -56,7 +66,10 @@ for file in allFiles:
                                    generate_hyper_AB(), generate_hyper_GNB(),
                                    generate_hyper_QDA(), generate_hyper_GBC(),
                                    generate_hyper_LDA(), generate_hyper_Perceptron(),
-                                   generate_hyper_LR(), generate_hyper_CNB()]
+                                   generate_hyper_LR(), generate_hyper_CNB(),
+                                   generate_hyper_SVC()]
+
+
 
     # Ignore warnings coming from unprocessed data
     warnings.filterwarnings("ignore")
