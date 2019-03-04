@@ -20,7 +20,7 @@ def classification(file, dataset, classifiers_names, classifier_functions, rando
     classifiers_logs = pd.DataFrame(columns=columns)
 
     if dataset.shape[0] * dataset.shape[1] >= 5000:
-        classifiers_names = classifiers_names[0:-2]
+        classifiers_names = classifiers_names[0:-1]
         classifier_functions = classifier_functions[0:-1]
         randomized_search_functions = randomized_search_functions[0:-1]
 
