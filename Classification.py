@@ -1,15 +1,22 @@
 import pandas as pd
+import numpy
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
-
+import signal
 import time
-
+from Timeout import Timeout
+import func_timeout
 
 def cv_column_filter(df):
-    return (df.loc[:, [c for c in df.columns
-                       if (c[:6] == "param_")]])
+    df=df.loc[:, [c for c in df.columns
+               if (c[:6] == "param_")]]
+    return df
 
 
+
+def handler(signum, frame):
+    print ("Forever is over!")
+    raise Exception("end of time")
 
 def classification(file, dataset, classifiers_names, classifier_functions, randomized_search_functions, columns):
 
@@ -19,10 +26,11 @@ def classification(file, dataset, classifiers_names, classifier_functions, rando
                                                         train_size=0.8, test_size=0.2, random_state=0)
     classifiers_logs = pd.DataFrame(columns=columns)
 
-    if dataset.shape[0] * dataset.shape[1] >= 5000:
-        classifiers_names = classifiers_names[0:-1]
-        classifier_functions = classifier_functions[0:-1]
-        randomized_search_functions = randomized_search_functions[0:-1]
+    #if dataset.shape[0] * dataset.shape[1] >= 5000:
+       # classifiers_names = classifiers_names[0:-1]
+       # classifier_functions = classifier_functions[0:-1]
+        #randomized_search_functions = randomized_search_functions[0:-1]
+
 
     i = 0
 
@@ -37,14 +45,53 @@ def classification(file, dataset, classifiers_names, classifier_functions, rando
         logs = pd.DataFrame(index=range(0, log_size), columns=columns)
         i = i + 1
 
-        # Fit training values to RandomizedSearchCV
-        try:
-            random_search.fit(X_train, y_train)
-        except (ValueError, RuntimeError, TypeError, NameError):
-            logs.loc["Dataset"] = file
-            logs.loc["Classifier"] = "sklearn." + name
-            continue
 
+        if(name=="SVC"):
+
+            ###Solution a
+            signal.signal(signal.SIGALRM, handler)
+            signal.alarm(10)
+
+            # Fit training values to RandomizedSearchCV
+            try:
+                ###Solution B timeout class
+                #with Timeout(120):
+                print("A")
+
+                random_search.fit(X_train,y_train)
+                #func_timeout(10,random_search.fit(),[X_train, y_train])
+                print("B")
+
+            except (BaseException, Exception, numpy.linalg.LinAlgError,Timeout.Timeout) as error:
+                print(error)
+                exp = True
+                print(exp)
+                #(ValueError, RuntimeError, TypeError, NameError, MemoryError):
+                logs.loc["Dataset"] = file
+                logs.loc["Classifier"] = "sklearn." + name
+                continue
+            #print("before")
+            #signal.alarm(0)
+            #if (exp == True):
+                #print("after")
+                #continue
+
+
+
+        else:
+
+            # Fit training values to RandomizedSearchCV
+            try:
+                random_search.fit(X_train, y_train)
+            except (BaseException, numpy.linalg.LinAlgError) as error:
+                print(error)
+                #(ValueError, RuntimeError, TypeError, NameError, MemoryError):
+                logs.loc["Dataset"] = file
+                logs.loc["Classifier"] = "sklearn." + name
+                continue
+
+
+        print("Here")
         # Store the results in cv_results
         cv_results = pd.DataFrame(random_search.cv_results_)
 
@@ -76,7 +123,8 @@ def classification(file, dataset, classifiers_names, classifier_functions, rando
                 start = time.perf_counter()
                 function.fit(X_train, y_train)
                 end = time.perf_counter()
-            except (ValueError, RuntimeError, TypeError, NameError):
+            except (BaseException, numpy.linalg.LinAlgError) as error:
+                print(error)
                 continue
 
             train_time = end - start

@@ -154,7 +154,7 @@ def generate_hyper_RF():
 
     random_search = RandomizedSearchCV(RF, param_distributions=param_dist_RF,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=50, random_state=0, refit=False)
+                                       n_iter=60, random_state=0, refit=False)
     return random_search
 
 
@@ -207,7 +207,7 @@ def generate_hyper_QDA():
     reg_param = np.exp(reg_param)
 
 
-    tol = np.unique(np.random.uniform(-9, 12, 20)).tolist()
+    tol = np.unique(np.random.uniform(-3, 12, 20)).tolist()
     tol=np.exp(tol)
 
     param_dist_QDA = {"reg_param": reg_param,
@@ -228,11 +228,10 @@ def generate_hyper_GBC():
 
     n_estimators = np.unique(np.random.randint(10, 1000, size=20)).tolist()
 
-    subsample = np.unique(np.random.uniform(-4, 5, size=10)).tolist()
-    subsample=np.exp(subsample)
+    subsample = np.unique(np.random.uniform(0, 1, size=10)).tolist()
 
     min_samples = np.unique(np.random.randint(2, 100, size=10)).tolist()
-    min_weight = np.unique(np.random.uniform(0, 100, size=10))
+    min_weight = np.unique(np.random.uniform(0, 0.5, size=10))
     min_weight = np.append(min_weight, 0).tolist()
 
     min_impurity_decrease = np.unique(np.random.uniform(0, 1, 10))
@@ -241,7 +240,7 @@ def generate_hyper_GBC():
     max_leaf_nodes = np.append(max_leaf_nodes, None).tolist()
     n_iter_no_change = np.unique(np.random.randint(3, 15, size=10)).tolist()
 
-    tol = np.unique(np.random.uniform(-9, 12, 20)).tolist()
+    tol = np.unique(np.random.uniform(-3, 8, 20)).tolist()
     tol=np.exp(tol)
 
     param_dist_GBC = {"loss": ["deviance", "exponential"],
@@ -273,7 +272,7 @@ def generate_hyper_LDA():
     LDA = LinearDiscriminantAnalysis()
 
     np.random.seed(seed=0)
-    tol = np.unique(np.random.uniform(-3, 12, 20)).tolist()
+    tol = np.unique(np.random.uniform(-3, 8, 20)).tolist()
     tol = np.exp(tol)
 
     param_dist_LDA = {"tol": tol,
