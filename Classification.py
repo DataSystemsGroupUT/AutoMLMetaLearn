@@ -33,37 +33,17 @@ def classification(file, dataset, classifiers_names, classifier_functions, rando
         logs = pd.DataFrame(index=range(0, log_size), columns=columns)
         i = i + 1
 
-        if (name == "SVC"):
-
-            fun = ffun(X_train,y_train,random_search)
-
-            # Fit training values to RandomizedSearchCV
-            try:
-
-                func_timeout(800, fun.fun, args=() )
-
-            except (BaseException, Exception, numpy.linalg.LinAlgError) as error:
-                print(error,flush=True)
-                exp = True
-                print(exp)
-                logs.loc[:,"Dataset"] = file
-                logs.loc[:,"Classifier"] = "sklearn." + name
-                logs.to_csv("ClassifierLogs.csv", header=False, mode='a', columns=columns, index=False)
-                continue
-
-        else:
-
-            # Fit training values to RandomizedSearchCV
-            try:
-                random_search.fit(X_train, y_train)
-            except (BaseException, Exception, numpy.linalg.LinAlgError) as error:
-                print(error,flush=True)
-                print("Error1",flush=True)
-                #(ValueError, RuntimeError, TypeError, NameError, MemoryError):
-                logs.loc[:,"Dataset"] = file
-                logs.loc[:,"Classifier"] = "sklearn." + name
-                logs.to_csv("ClassifierLogs.csv", header=False, mode='a', columns=columns, index=False)
-                continue
+        # Fit training values to RandomizedSearchCV
+        fun = ffun(X_train,y_train,random_search)
+        try:
+            func_timeout(12000, fun.fun, args=() ) # maximum 5 minutes per 1 iteration and we have max 40 iterations --> 40 * 5 * 60 = 12000
+        except (BaseException, Exception, numpy.linalg.LinAlgError) as error:
+            print(error, flush=True)
+            print("Error1:", flush=True)
+            logs.loc[:,"Dataset"] = file
+            logs.loc[:,"Classifier"] = "sklearn." + name
+            logs.to_csv("ClassifierLogs.csv", header=False, mode='a', columns=columns, index=False)
+            continue
 
 
         # Store the results in cv_results

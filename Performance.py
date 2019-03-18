@@ -52,7 +52,7 @@ classifiers_logs.to_csv("ClassifierLogs.csv", index=False, columns=columns)
 ########################################################################################################################
 ### Step 1. Loop through all Datasets in the directory
 
-path = 'Datasets_all'
+path = 'C:\\Users\\s-moh\\0-Labwork\\AutoMetaLearning\\AutoMLMetaLearn\\sample'
 allFiles = glob.glob(path + "/*.csv")
 for file in allFiles:
     # Read the dataset into a pandas dataframe
