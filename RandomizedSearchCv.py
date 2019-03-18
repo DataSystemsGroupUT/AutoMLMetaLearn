@@ -279,8 +279,8 @@ def generate_hyper_LR():
                      "intercept_scaling": intercept_scaling,
                      "fit_intercept": [True, False],
                      "random_state": [0],
-                     "solver": ["newton-cg", "lbfgs", "liblinear", "sag", "saga"], ## NOTE HERE
-                     "multi_class": ["ovr", "multinomial", "auto"], ## NOTE HERE
+                     "solver": ["newton-cg", "lbfgs", "liblinear", "sag", "saga"],
+                     "multi_class": ["auto"],
                      "max_iter": max_iter,
                      "warm_start": [True, False],
                      }
