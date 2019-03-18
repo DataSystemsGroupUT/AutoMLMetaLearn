@@ -1,6 +1,7 @@
 import pandas as pd
 import glob
 import warnings
+import time
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
@@ -22,14 +23,13 @@ classifiers_names = ["KNeighborsClassifier", "GaussianProcessClassifier", "Decis
                      "AdaBoostClassifier", "GaussianNB", "QuadraticDiscriminantAnalysis", "GradientBoostingClassifier",
                      "LinearDiscriminantAnalysis", "Perceptron", "LogisticRegression", "ComplementNB", "SVC"]
 
-columns = ["Dataset", "Classifier", "n_neighbors", "weights", "algorithm", "leaf_size", "p", "metric",
+columns = ["Dataset", "Classifier", "n_neighbors", "weights", "algorithm", "leaf_size", "p", "metric","bootstrap",
            "C", "kernel", "degree", "gamma", "coef0", "shrinking", "shrinkage", "class_weight", "decision_function_shape",
            "random_state", "criterion", "splitter", "max_depth", "min_samples_split", "min_samples_leaf",
-           "max_features", "max_leaf_nodes", "min_impurity_decrease", "presort", "n_estimators", "bootstrap",
-           "oob_score", "warm_start", "learning_rate", "n_restarts_optimizer", "max_iter_predict",
-           "copy_X_train", "multi_class", "reg_param", "tol", "loss", "subsample", "min_weight_fraction_leaf",
-           "penalty", "dual", "fit_intercept", "intercept_scaling", "solver", "max_iter", "alpha", "shuffle",
-           "early_stopping", "n_iter_no_change", "fit_prior", "norm", "eta0", "var_smoothing",
+           "oob_score", "warm_start", "learning_rate", "n_restarts_optimizer", "max_iter_predict", "max_features",
+           "copy_X_train", "multi_class", "reg_param", "tol", "loss", "subsample", "min_weight_fraction_leaf", "n_estimators",
+           "penalty", "dual", "fit_intercept", "intercept_scaling", "solver", "max_iter", "alpha", "shuffle", "max_leaf_nodes",
+           "early_stopping", "n_iter_no_change", "fit_prior", "norm", "eta0", "var_smoothing", "presort", "min_impurity_decrease",
            "Train accuracy", "Train recall", "Train precision", "Train f1_score", "Train time", "Test accuracy",
            "Test recall", "Test precision", "Test f1_score", "Test time"]
 
@@ -47,6 +47,7 @@ classifier_functions = [KNeighborsClassifier(), GaussianProcessClassifier(), Dec
 
 classifiers_logs = pd.DataFrame(columns=columns)
 
+classifiers_logs.to_csv("ClassifierLogs.csv", index=False, columns=columns)
 
 ########################################################################################################################
 ### Step 1. Loop through all Datasets in the directory
@@ -55,6 +56,9 @@ path = 'Datasets_all'
 allFiles = glob.glob(path + "/*.csv")
 for file in allFiles:
     # Read the dataset into a pandas dataframe
+
+    start = time.time()
+
     dataset = pd.read_csv(file, index_col=None, header=0)
 
 
@@ -77,9 +81,9 @@ for file in allFiles:
 ########################################################################################################################
 ### Step 2. Loop through all classifiers stored in classifier functions.
 
-    logs = classification(file, dataset, classifiers_names, classifier_functions, randomized_search_functions, columns)
 
-    classifiers_logs = classifiers_logs.append(logs)
+    classification(file, dataset, classifiers_names, classifier_functions, randomized_search_functions, columns)
 
-#Save logs to file
-classifiers_logs.to_csv("ClassifierLogs.csv", index=False, columns=columns)
+    end = time.time()
+
+    print(end-start, flush=True)
