@@ -1,4 +1,3 @@
-
 import numpy as np
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
@@ -37,7 +36,7 @@ def generate_hyper_Perceptron():
 
     random_search = RandomizedSearchCV(Percept, param_distributions=param_dist_Perceptron,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=50, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=20, random_state=0, refit=False, n_jobs=-1)
     return random_search
 
 
@@ -52,7 +51,7 @@ def generate_hyper_KNN():
 
     random_search = RandomizedSearchCV(knn, param_distributions=param_dist_knn,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=50, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=20, random_state=0, refit=False, n_jobs=-1)
 
     return random_search
 
@@ -70,13 +69,11 @@ def generate_hyper_SVC():
                       "degree": [1, 2, 3, 4, 5],
                       "gamma": exponential,
                       "coef0": exponential,
-                      "shrinking": [True, False],
                       "class_weight": ["balanced", None],
-                      "decision_function_shape": ["ovo", "ovr"],
                       "random_state": [0]}
     random_search = RandomizedSearchCV(svm, param_distributions=param_dist_svm,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=20, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=10, random_state=0, refit=False, n_jobs=-1)
 
     return random_search
 
@@ -93,7 +90,7 @@ def generate_hyper_GNB():
 
     random_search = RandomizedSearchCV(gaussianNB, param_dist_GNB,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=10, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=3, random_state=0, refit=False, n_jobs=-1)
 
     return random_search
 
@@ -121,7 +118,7 @@ def generate_hyper_DT():
 
     random_search = RandomizedSearchCV(DT, param_distributions=param_dist_DT,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=50, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=20, random_state=0, refit=False, n_jobs=-1)
 
     return random_search
 
@@ -154,7 +151,7 @@ def generate_hyper_RF():
 
     random_search = RandomizedSearchCV(RF, param_distributions=param_dist_RF,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=70, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=30, random_state=0, refit=False, n_jobs=-1)
     return random_search
 
 
@@ -174,7 +171,7 @@ def generate_hyper_AB():
 
     random_search = RandomizedSearchCV(AB, param_distributions=param_dist_AB,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=50, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=20, random_state=0, refit=False, n_jobs=-1)
 
     return random_search
 
@@ -194,7 +191,7 @@ def generate_hyper_GP():
 
     random_search = RandomizedSearchCV(GPC, param_distributions=param_dist_GPC,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=50, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=10, random_state=0, refit=False, n_jobs=-1)
 
     return random_search
 
@@ -215,7 +212,7 @@ def generate_hyper_QDA():
 
     random_search = RandomizedSearchCV(QDA, param_distributions=param_dist_QDA,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=50, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=5, random_state=0, refit=False, n_jobs=-1)
     return random_search
 
 
@@ -264,7 +261,7 @@ def generate_hyper_GBC():
 
     random_search = RandomizedSearchCV(GBC, param_distributions=param_dist_GBC,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=50, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=30, random_state=0, refit=False, n_jobs=-1)
     return random_search
 
 
@@ -281,7 +278,7 @@ def generate_hyper_LDA():
 
     random_search = RandomizedSearchCV(LDA, param_distributions=param_dist_LDA,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=20, random_state=0, refit=False,  n_jobs=-1)
+                                       n_iter=5, random_state=0, refit=False,  n_jobs=-1)
     return random_search
 
 
@@ -313,7 +310,7 @@ def generate_hyper_LR():
 
     random_search = RandomizedSearchCV(LR, param_distributions=param_dist_LR,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=60, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=20, random_state=0, refit=False, n_jobs=-1)
     return random_search
 
 
@@ -332,5 +329,5 @@ def generate_hyper_CNB():
 
     random_search = RandomizedSearchCV(CNB, param_distributions=param_dist_CNB,
                                        cv=2, error_score=np.nan, return_train_score=True,
-                                       n_iter=40, random_state=0, refit=False, n_jobs=-1)
+                                       n_iter=5, random_state=0, refit=False, n_jobs=-1)
     return random_search
