@@ -36,7 +36,7 @@ def classification(file, dataset, classifiers_names, classifier_functions, rando
         # Fit training values to RandomizedSearchCV
         fun = ffun(X_train,y_train,random_search)
         try:
-            func_timeout(12000, fun.fun, args=() ) # maximum 5 minutes per 1 iteration and we have max 40 iterations --> 40 * 5 * 60 = 12000
+            func_timeout(10, fun.fun, args=() ) # maximum 5 minutes per 1 iteration and we have max 40 iterations --> 40 * 5 * 60 = 12000
         except (BaseException, Exception, numpy.linalg.LinAlgError) as error:
             print(error, flush=True)
             print("Error1:", flush=True)

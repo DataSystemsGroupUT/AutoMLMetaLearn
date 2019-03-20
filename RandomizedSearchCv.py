@@ -14,8 +14,10 @@ def generate_hyper_Perceptron():
 
     Percept = Perceptron()
     np.random.seed(seed=0)
-    alpha = np.unique(np.random.uniform(-6, 1, 10)).tolist()
-    tol = np.exp(alpha)
+    alpha = np.unique(np.random.uniform(-7, -1, 10)).tolist()
+    alpha = np.exp(alpha)
+    tol = np.unique(np.random.uniform(-6, 1, 10)).tolist()
+    tol = np.exp(tol)
     max_iter = np.unique(np.random.randint(5, 1000, size=20)).tolist()
     n_iter_no_change = np.unique(np.random.randint(5, 1000, size=20)).tolist()
 
@@ -82,7 +84,7 @@ def generate_hyper_GNB():
 
     np.random.seed(seed=0)
 
-    param_dist_GNB = {"var_smoothing": 1e-9}
+    param_dist_GNB = {"var_smoothing": [1e-9]}
 
     random_search = RandomizedSearchCV(gaussianNB, param_dist_GNB,
                                        cv=2, error_score=np.nan, return_train_score=True,
@@ -97,9 +99,9 @@ def generate_hyper_DT():
     min_samples = np.unique(np.random.randint(2, 20, size=10)).tolist()
     max_leaf_nodes = np.unique(np.random.randint(10, 200, size=10))
     max_leaf_nodes = np.append(max_leaf_nodes, None).tolist()
-    min_impurity_decrease = np.unique(np.append(np.random.uniform(0, 1, 10)), 0).tolist()
+    min_impurity_decrease = np.unique(np.append(np.random.uniform(0, 1, 10), 0)).tolist()
     
-    max_features = np.unique(np.random.randint(0, 1, size=0)).tolist()
+    max_features = np.unique(np.random.rand(10)).tolist()
 
     param_dist_DT = {"criterion": ["gini", "entropy"],
                      "max_depth": [None, 10, 20, 30, 50, 70],
@@ -125,7 +127,7 @@ def generate_hyper_RF():
     min_samples = np.unique(np.random.randint(2, 20, size=10)).tolist()
     max_leaf_nodes = np.unique(np.random.randint(10, 1000, size=50))
     max_leaf_nodes = np.append(max_leaf_nodes, None).tolist()
-    max_features = np.unique(np.random.randint(0, 1, size=0)).tolist()
+    max_features = np.unique(np.random.rand(10)).tolist()
 
     min_impurity_decrease = np.unique(np.random.uniform(0, 100, 15))
     min_impurity_decrease = np.append(min_impurity_decrease, 0).tolist()
@@ -156,13 +158,11 @@ def generate_hyper_AB():
     n_estimators = np.unique(np.random.randint(50, 500, size=30)).tolist()
     learning_rate = np.unique(np.random.uniform(-4, 1, size=10)).tolist()
     learning_rate=np.exp(learning_rate)
-    max_depth = np.unique(np.random.randint(1, 10, size=10)).tolist()
     
     param_dist_AB = {"random_state": [0],
                      "n_estimators": n_estimators,
                      "learning_rate": learning_rate,
-                     "algorithm": ["SAMME.R", "SAMME"],
-                     "max_depth": max_depth}
+                     "algorithm": ["SAMME.R", "SAMME"]}
 
     random_search = RandomizedSearchCV(AB, param_distributions=param_dist_AB,
                                        cv=2, error_score=np.nan, return_train_score=True,
@@ -212,17 +212,17 @@ def generate_hyper_GBC():
     learning_rate = np.unique(np.random.uniform(-5, 1, size=10)).tolist()
     learning_rate=np.exp(learning_rate)
 
-    n_estimators = np.unique(np.random.randint(50, 500, size=20)).tolist()
+    n_estimators = np.unique(np.random.randint(50, 400, size=20)).tolist()
 
     subsample = np.unique(np.random.uniform(0.01, 1, size=10)).tolist()
 
     min_samples = np.unique(np.random.randint(2, 20, size=10)).tolist()
     min_weight = np.unique(np.append(np.random.uniform(0, 0.5, size=10), 0)).tolist()
 
-    min_impurity_decrease = np.unique(np.append(np.random.uniform(0, 1, 10)), 0).tolist()
+    min_impurity_decrease = np.unique(np.append(np.random.uniform(0, 1, 10), 0)).tolist()
     max_leaf_nodes = np.unique(np.random.randint(10, 1000, size=10))
     max_leaf_nodes = np.append(max_leaf_nodes, None).tolist()
-    max_features = np.unique(np.random.randint(0, 1, size=0)).tolist()
+    max_features = np.unique(np.random.rand(10)).tolist()
     
     param_dist_GBC = {"loss": ["deviance"],
                       "learning_rate": learning_rate,
@@ -253,7 +253,6 @@ def generate_hyper_LDA():
     tol = np.exp(tol)
 
     param_dist_LDA = {"tol": tol,
-                      "shrinkage": [None, "auto"],
                       "n_components": [1, 10, 30, 60, 150, 200, 250]}
 
     random_search = RandomizedSearchCV(LDA, param_distributions=param_dist_LDA,
