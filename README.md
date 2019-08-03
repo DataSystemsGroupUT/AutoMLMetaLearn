@@ -62,8 +62,8 @@ Hoeffding Tree          IBK                       Decision Table
 
 Bagging                 PART                      SMO
 
-Logic Boost J48         Simple Logistic           Logistic Regression
+Logic Boost             Simple Logistic           Logistic Regression
 
 AdaBoostM1              REPTree                   Logistic Model Trees
 
-OneR </pre>
+OneR                    J48 </pre>
