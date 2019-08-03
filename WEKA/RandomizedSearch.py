@@ -4,6 +4,10 @@ import numpy as np
 import sys
 
 def permutations(dictionary):
+    """
+    :param dictionary: Dictionary with hyperparameters
+    :return: All possible permutations
+    """
     keys, values = zip(*dictionary.items())
     experiments = [dict(zip(keys, v)) for v in itertools.product(*values)]
 
@@ -14,10 +18,9 @@ def permutations(dictionary):
 
 
 def generate_hyper_J48():
-    np.random.seed(seed=0)
 
+    np.random.seed(seed=0)
     C = np.unique(np.random.uniform(0, 1, 10))
-    print("J48")
 
     param_dist_J48 = {
 
@@ -51,9 +54,8 @@ def generate_hyper_J48():
 
 
 def generate_hyper_ABM1():
-    print("ABM1")
-    np.random.seed(seed=0)
 
+    np.random.seed(seed=0)
     P = np.unique(np.random.randint(0, 101, 20))
     I = np.unique(np.random.randint(0, 201, 20))
     param_dist_ABM1 = {
@@ -78,9 +80,8 @@ def generate_hyper_ABM1():
 
 # Logistic regression
 def generate_hyper_LR():
-    np.random.seed(seed=0)
 
-    print("LR")
+    np.random.seed(seed=0)
     iterations = np.unique(np.random.randint(0, 501, 20))
     iterations = np.append(iterations, -1)
 
@@ -95,9 +96,8 @@ def generate_hyper_LR():
 
 
 def generate_hyper_NB():
-    np.random.seed(seed=0)
 
-    print("NB")
+    np.random.seed(seed=0)
     param_dist_NB = {
         # Use kernel density estimator rather than normal distribution for numeric attributes
         "-K": [True, False],
@@ -116,12 +116,9 @@ def generate_hyper_NB():
 
 def generate_hyper_RF():
 
-    print("RF")
     np.random.seed(seed=0)
-
     n_iter = np.unique(np.random.randint(5, 500, size=7)).tolist()
     batch_size = np.unique(np.random.randint(50, 500, size=7)).tolist()
-
     bag_size = np.unique(np.random.randint(0, 100, size=7)).tolist()
     variance = np.unique(np.random.uniform(-7, 5, size=7)).tolist()
     variance = np.exp(variance)
@@ -168,7 +165,7 @@ def generate_hyper_RF():
 
 # REPTree
 def generate_hyper_REP():
-    print("REP")
+
     np.random.seed(seed=0)
     variance = np.unique(np.random.uniform(-7, 5, size=10)).tolist()
     variance = np.exp(variance)
@@ -199,9 +196,8 @@ def generate_hyper_REP():
 
 
 def generate_hyper_PART():
-    np.random.seed(seed=0)
-    print("PART")
 
+    np.random.seed(seed=0)
     param_dist_PART = {
 
 
@@ -230,8 +226,8 @@ def generate_hyper_PART():
 
 # logistic model trees
 def generate_hyper_LMT():
+
     np.random.seed(seed=0)
-    print("LMT")
     beta = np.unique(np.random.uniform(-7, 5, size=10)).tolist()
     beta = np.exp(beta)
     min_split = np.unique(np.random.randint(2, 100, size=10)).tolist()
@@ -274,7 +270,7 @@ def generate_hyper_LMT():
 
 
 def generate_hyper_KStar():
-    np.random.seed(seed=0)
+
     param_dist_KSTAR = {
         # Manual blend setting (default 20%)
         "-B": [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
@@ -293,8 +289,7 @@ def generate_hyper_KStar():
 
 # Using default search algorithm
 def generate_hyper_IBk():
-    np.random.seed(seed=0)
-    print("IBk")
+
     param_dist_IBk = {
         # Weight neighbours by the inverse of their distance(use when k > 1)
         "-I": [True, False],
@@ -319,7 +314,7 @@ def generate_hyper_IBk():
 
 # HoeffdingTree
 def generate_hyper_HF():
-    print("HF")
+
     np.random.seed(seed=0)
     error = np.unique(np.random.uniform(-7, 5, size=10)).tolist()
     error = np.exp(error)
@@ -354,9 +349,8 @@ def generate_hyper_HF():
 # Decision Table
 # Default search method
 def generate_hyper_DT():
-    np.random.seed(seed=0)
 
-    print("DT")
+
     param_dist_DT = {
 
         # Performance evaluation measure to use for selecting attributes.
@@ -376,8 +370,6 @@ def generate_hyper_DT():
 
 
 def generate_hyper_OneR():
-    print("OneR")
-    np.random.seed(seed=0)
 
     param_dist_OneR = {
         # The minimum number of objects in a bucket
@@ -392,8 +384,8 @@ def generate_hyper_OneR():
 
 # With default kernel  and calibrator
 def generate_hyper_SMO():
+
     np.random.seed(seed=0)
-    print("SMO")
     epsilon = np.unique(np.random.uniform(-7, 0, size=10)).tolist()
     epsilon = np.exp(epsilon)
 
@@ -425,8 +417,8 @@ def generate_hyper_SMO():
 
 # Simple Logistic
 def generate_hyper_SL():
+
     np.random.seed(seed=0)
-    print("SL")
     iterations = np.unique(np.random.randint(0, 301, 20))
     beta = np.unique(np.random.uniform(-7, 5, size=10)).tolist()
     beta = np.exp(beta)
@@ -455,9 +447,8 @@ def generate_hyper_SL():
 
 # Default classifier RePTree
 def generate_hyper_Bagging():
-    np.random.seed(seed=0)
 
-    print("Bagging")
+    np.random.seed(seed=0)
     iterations = np.unique(np.random.randint(0, 301, 20))
     param_dist_Bagging = {
         #  Full name of base classifier.
@@ -478,16 +469,15 @@ def generate_hyper_Bagging():
 
 # Logit Boost
 def generate_hyper_LB():
-    np.random.seed(seed=0)
 
-    print("LB")
+    np.random.seed(seed=0)
     Z = np.unique(np.random.randint(0, 50, 10))
     improvement = np.unique(np.random.randint(0, 30, 20))
     improvement = -np.exp(improvement)
     improvement = np.append(improvement, -sys.float_info.max)
     iterations = np.unique(np.random.randint(0, 301, 20))
-
     shrinkage = np.unique(np.random.uniform(0, 1, 10))
+
     param_dist_LB = {
         # Use resampling instead of reweighting for boosting.
         "-Q": [True, False],

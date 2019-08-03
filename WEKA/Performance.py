@@ -14,18 +14,22 @@ from Weka.Classification import classification
 jvm.start(max_heap_size="15g")
 
 
-classifiers_names = ["J48", "AdaBoostM1", "LogisticRegression", "Naive Bayes",
+classifiers_names = [
+                     "J48", "AdaBoostM1", "LogisticRegression", "Naive Bayes",
                      "RandomForest", "REPTree", "PART", "Logistic Model Trees",
                      "KStar", "IBk", "HoeffdingTree", "Decision Table", "OneR",
-                     "SMO", "Simple Logistic", "Bagging", "Logic Boost"]
+                     "SMO", "Simple Logistic", "Bagging", "Logic Boost"
+                    ]
 
-columns = ["Dataset", "Classifier", "-A", "-B", "-C", "-D", "-E", "-F", "-G", "-H", "-I", "-J",
-           "-K", "-L", "-M", "-N", "-O", "-P", "-Q", "-R", "-S", "-T", "-U", "-V","-X", "-Y", "-Z",
-           "-doNotMakeSplitPointActualValue",
+columns = [
+           "Dataset", "Classifier", "-A", "-B", "-C", "-D", "-E", "-F", "-G", "-H", "-I", "-J",
+           "-K", "-L", "-M", "-N", "-O", "-P", "-Q", "-R", "-S", "-T", "-U", "-V","-X", "-Y",
+           "-Z", "-doNotMakeSplitPointActualValue",
            "Train accuracy", "Train recall", "Train precision", "Train f1_score", "Train time",
-           "Test accuracy", "Test recall", "Test precision", "Test f1_score", "Test time"]
+           "Test accuracy", "Test recall", "Test precision", "Test f1_score", "Test time"
+          ]
 
-# List of 12 classifier functions implemented on Weka.
+# List of 17 classifier functions implemented on Weka.
 # It should follow same order as classifiers_names
 classifier_functions = [Classifier(classname="weka.classifiers.trees.J48"),
                         Classifier(classname="weka.classifiers.meta.AdaBoostM1"),
@@ -65,16 +69,16 @@ for file in allFiles:
 
     # List of functions that run RandomizedSearchCV
     # The order should match with classifiers_names and classifiers_functions
-    parameter_search_functions = [ generate_hyper_J48(),
-                                   generate_hyper_ABM1(),
-                                   generate_hyper_LR(), generate_hyper_NB(),
-                                   generate_hyper_RF(), generate_hyper_REP(),
-                                   generate_hyper_PART(),
-                                   generate_hyper_LMT(), generate_hyper_KStar(),
-                                   generate_hyper_IBk(), generate_hyper_HF(),
-                                   generate_hyper_DT(),generate_hyper_OneR(),
-                                   generate_hyper_SMO(),generate_hyper_SL(),
-                                   generate_hyper_Bagging(),generate_hyper_LB() ]
+    parameter_search_functions = [
+                                   generate_hyper_J48(),     generate_hyper_ABM1(),
+                                   generate_hyper_LR(),      generate_hyper_NB(),
+                                   generate_hyper_RF(),      generate_hyper_REP(),
+                                   generate_hyper_PART(),    generate_hyper_LMT(),
+                                   generate_hyper_KStar(),   generate_hyper_IBk(),
+                                   generate_hyper_HF(),      generate_hyper_DT(),
+                                   generate_hyper_OneR(),    generate_hyper_SMO(),generate_hyper_SL(),
+                                   generate_hyper_Bagging(), generate_hyper_LB()
+                                 ]
 
 
 
@@ -85,4 +89,5 @@ for file in allFiles:
 ### Step 2. Loop through all classifiers stored in classifier functions.
 
     classification(file, dataset, classifiers_names, classifier_functions, parameter_search_functions, columns)
+
 jvm.stop()

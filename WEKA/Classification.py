@@ -6,18 +6,15 @@ from weka.classifiers import Evaluation
 from weka.core.classes import Random
 from weka.filters import Filter
 from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score
-from func_timeout import func_timeout
 
 
 
 def handle_numeric_pred(y_weka):
+
     """
     :param y_weka: Target values in java instance format
     :return: Target values in a python list
-
     """
-
-
     y_list=[]
     for i in y_weka:
         try:
@@ -26,6 +23,7 @@ def handle_numeric_pred(y_weka):
             print(error)
             y_list.append(999999)
     return y_list
+
 
 def handle_string_pred(y_weka,dataset):
 
@@ -98,17 +96,17 @@ def classification(file, dataset, classifiers_names, classifier_functions, param
     if dataset.attribute(class_index).is_numeric:
         numeric = True
         # Apply NumericToNominal filter to the last column which is our class
-        convert =Filter(classname="weka.filters.unsupervised.attribute.NumericToNominal", options=["-R" ,"last"])
+        convert = Filter(classname="weka.filters.unsupervised.attribute.NumericToNominal", options=["-R", "last"])
         convert.inputformat(dataset)
-        dataset =convert.filter(dataset)
+        dataset = convert.filter(dataset)
 
     elif dataset.attribute(class_index).is_string:
         string =True
 
         # Apply StringToNominal filter to the last column which is our class
-        convert =Filter(classname="weka.filters.unsupervised.attribute.StringToNominal", options=["-R" ,"last"])
+        convert = Filter(classname="weka.filters.unsupervised.attribute.StringToNominal", options=["-R", "last"])
         convert.inputformat(dataset)
-        dataset =convert.filter(dataset)
+        dataset = convert.filter(dataset)
 
     elif dataset.attribute(class_index).is_nominal:
         string =True
@@ -151,18 +149,18 @@ def classification(file, dataset, classifiers_names, classifier_functions, param
         # Select the classifier to apply
         classifier = classifier_functions[i]
 
-        # Select the hypermarameter generation function to apply in accordance with the classifier
+        # Select the hypermarameter generation function to apply according to classifier
         param_search = param_search_functions[i]
 
         log_size = param_search.shape[0]
 
 
         # Select at maximum 25 hyperparameter combinations
-        if log_size >25:
+        if log_size > 25:
             np.random.seed(seed=0)
-            indices =np.random.choice(log_size, size=40, replace=False, p=None)
-            param_search =param_search.iloc[indices,]
-            log_size =25
+            indices = np.random.choice(log_size, size=40, replace=False, p=None)
+            param_search = param_search.iloc[indices, ]
+            log_size = 25
 
         # Create a temporary empty logs dataframe
         logs = pd.DataFrame(index=range(0, log_size), columns=columns)
@@ -177,7 +175,7 @@ def classification(file, dataset, classifiers_names, classifier_functions, param
             logs.at[j, "Dataset"] = file
 
             ##Probably get the name from classifier parameter
-            logs.at[j, "Classifier"] = "Weka. " +name
+            logs.at[j, "Classifier"] = "Weka. " + name
 
             # Store parameters generated in a list as an accepted format from classifier.
             param_values =[]
@@ -194,7 +192,7 @@ def classification(file, dataset, classifiers_names, classifier_functions, param
                 if isinstance(value, numpy.bool_):
 
                     # Just to avoid confusion when comparing 1 to True and 0 to False
-                    if value==True:
+                    if value == True:
                         # If boolean parameter is set to true append it to list of parameters
                         param_values.append(str(column))
                     else:
@@ -206,7 +204,7 @@ def classification(file, dataset, classifiers_names, classifier_functions, param
 
             # Update the classifier parameters via options method
             try:
-                classifier.options =param_values
+                classifier.options = param_values
             except (BaseException, Exception) as error:
                 print(error, flush=True)
                 continue
@@ -236,20 +234,18 @@ def classification(file, dataset, classifiers_names, classifier_functions, param
 
             # Predict labels for train data
 
-            evl = evaluation.test_model(classifier, train) ### Predictions but in numeric formatl
-
+            evl = evaluation.test_model(classifier, train) # Predictions but in numeric formatl
 
             # Undo the mapping that Weka does from class labels to numbers
             if string:
-                pred_train=handle_string_pred(evl,dataset)
+                pred_train = handle_string_pred(evl, dataset)
 
             if numeric:
-                pred_train=handle_numeric_pred(evl)
-
+                pred_train = handle_numeric_pred(evl)
 
             # Predict labels for test data and measure time in fractional seconds
             start = time.perf_counter()
-            evl = evaluation.test_model(classifier, test) ### Predictions but in numeric formatl
+            evl = evaluation.test_model(classifier, test) # Predictions but in numeric formatl
             end = time.perf_counter()
             test_time = end - start
             logs.at[j, "Test time"] = test_time
