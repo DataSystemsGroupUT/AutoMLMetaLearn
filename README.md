@@ -2,8 +2,7 @@
 
 In the context of Automated
 Machine Learning (AutoML) process, one main advantage of
-meta-learning techniques is that they allow replacing hand-
-engineered algorithms with novel automated methods which are
+meta-learning techniques is that they allow replacing hand-engineered algorithms with novel automated methods which are
 designed in a data-driven way. In this paper, we present a
 methodology and framework for using Meta-Learning techniques
 to develop new methods that serve as an effective multi-objective
